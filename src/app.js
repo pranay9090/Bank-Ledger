@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
 const authRouter = require("./routes/auth.routes.js");
 const accountRouter = require("./routes/account.routes.js");
 const transactionRouter = require("./routes/transaction.routes.js");
@@ -17,13 +18,18 @@ app.use(cors({
 app.use(express.json());
 app.use(cookie_parser());
 
-app.get('/', (req, res) => {
-    res.send("YOOOOOOOOOOOOOOOOHHHHHHHHHOOOOOOOOOOOOOOOOOO");
-});
-
 // routes
 app.use("/api/auth", authRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/transactions", transactionRouter);
+
+const frontendDistPath = path.join(__dirname, "../Frontend/dist");
+app.use(express.static(frontendDistPath));
+
+app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+        res.sendFile(path.join(frontendDistPath, "index.html"));
+    }
+});
 
 module.exports = app;
