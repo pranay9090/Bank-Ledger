@@ -26,10 +26,12 @@ app.use("/api/transactions", transactionRouter);
 const frontendDistPath = path.join(__dirname, "../Frontend/dist");
 app.use(express.static(frontendDistPath));
 
-app.get("*", (req, res) => {
-    if (!req.path.startsWith("/api")) {
-        res.sendFile(path.join(frontendDistPath, "index.html"));
+// SPA fallback compatible with Express 5
+app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+        return res.sendFile(path.join(frontendDistPath, 'index.html'));
     }
+    next();
 });
 
 module.exports = app;
