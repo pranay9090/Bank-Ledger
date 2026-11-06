@@ -1,0 +1,41 @@
+/* ==========================================================================
+   DashboardLayout Component Styles - 3-Level Surface Hierarchy
+   ========================================================================== */
+
+.layout-root {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg, #09090b);
+  box-sizing: border-box;
+}
+
+.layout-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+  background-color: transparent;
+}
+
+.layout-content-area {
+  flex: 1;
+  width: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.layout-content-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .layout-content-area {
+    padding: 24px 20px 48px;
+  }
+}

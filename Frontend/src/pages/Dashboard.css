@@ -1,0 +1,398 @@
+/* ==========================================================================
+   Dashboard Page Styles - Minimalist Executive Layout
+   ========================================================================== */
+
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   Header Section
+   ========================================================================== */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dashboard-title {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.dashboard-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 22px;
+  background-color: #ffffff;
+  color: #09090b;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 0px !important;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  user-select: none;
+}
+
+.dashboard-primary-btn:hover {
+  opacity: 0.92;
+}
+
+.dashboard-primary-btn:active {
+  transform: scale(0.99);
+}
+
+/* ==========================================================================
+   Hero Balance Card (--surface: #16161a, padding: 48px)
+   ========================================================================== */
+
+.dashboard-hero-card {
+  position: relative;
+  width: 100%;
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 0px !important;
+  padding: 48px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.dashboard-hero-glow {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.dashboard-hero-label {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #9a9aa2;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.dashboard-balance-display {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: clamp(56px, 7vw, 88px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.05;
+  margin: 0 0 24px 0;
+  display: flex;
+  align-items: baseline;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-balance-symbol,
+.dashboard-balance-paise {
+  color: #6b6b73;
+  font-size: 0.5em;
+  font-weight: 700;
+}
+
+.dashboard-balance-symbol {
+  margin-right: 6px;
+}
+
+.dashboard-balance-loading {
+  color: #6b6b73;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 500;
+}
+
+.dashboard-account-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dashboard-account-tag {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #9a9aa2;
+  text-transform: uppercase;
+}
+
+.dashboard-copy-account-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--surface-2, #1d1d22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+  padding: 6px 14px;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 0px !important;
+  letter-spacing: 0;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dashboard-copy-account-btn:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-copy-account-btn.is-copied {
+  color: #3ddc97;
+  border-color: rgba(61, 220, 151, 0.35);
+}
+
+/* ==========================================================================
+   Quick Actions Row (2 equal cards)
+   ========================================================================== */
+
+.dashboard-quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .dashboard-quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-action-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 0px !important;
+  padding: 24px 28px;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
+}
+
+.dashboard-action-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dashboard-action-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.dashboard-action-icon-box {
+  width: 44px;
+  height: 44px;
+  background-color: var(--surface-2, #1d1d22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.dashboard-action-title {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  margin-bottom: 4px;
+  letter-spacing: 0;
+}
+
+.dashboard-action-desc {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 14px;
+  color: #c9c9ce;
+  letter-spacing: 0;
+}
+
+.dashboard-action-arrow {
+  color: #9a9aa2;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.dashboard-action-card:hover .dashboard-action-arrow {
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Recent Activity Section
+   ========================================================================== */
+
+.dashboard-activity-card {
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 0px !important;
+  padding: 28px 32px;
+  box-sizing: border-box;
+}
+
+.dashboard-activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dashboard-activity-title {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.dashboard-activity-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: #9a9aa2;
+  text-decoration: none;
+  letter-spacing: 0;
+  transition: color 0.15s ease;
+}
+
+.dashboard-activity-view-all:hover {
+  color: #ffffff;
+}
+
+.dashboard-activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+
+.dashboard-activity-row:last-child {
+  border-bottom: none;
+}
+
+.dashboard-activity-row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dashboard-activity-row-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dashboard-activity-icon-badge {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-2, #1d1d22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.dashboard-activity-icon-badge.is-credit {
+  color: #3ddc97;
+}
+
+.dashboard-activity-icon-badge.is-debit {
+  color: #ff6b6b;
+}
+
+.dashboard-activity-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dashboard-activity-txid {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.dashboard-activity-date {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: #9a9aa2;
+  letter-spacing: 0;
+}
+
+.dashboard-activity-amount {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+  letter-spacing: 0;
+}
+
+.dashboard-activity-amount.is-credit {
+  color: #3ddc97;
+}
+
+.dashboard-activity-amount.is-debit {
+  color: #ff6b6b;
+}
+
+.dashboard-activity-empty {
+  padding: 36px 0;
+  text-align: center;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  color: #9a9aa2;
+}
+
+@media (max-width: 600px) {
+  .dashboard-hero-card {
+    padding: 32px 24px;
+  }
+
+  .dashboard-activity-card {
+    padding: 24px 20px;
+  }
+}
+

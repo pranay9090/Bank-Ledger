@@ -36,8 +36,8 @@ async function userLogController(req, res) {
     const user = await userModel.findOne({ email }).select("+password");
 
     if (!user) {
-        return res.status(402).json({
-            message: "The Email is Invalid",
+        return res.status(401).json({
+            message: "Invalid email or password",
             status: "failed"
         })
     }
@@ -45,8 +45,8 @@ async function userLogController(req, res) {
     const validPassword = await user.comparePassword(password);
 
     if (!validPassword) {
-        return res.status(402).json({
-            message: "Invalid Password",
+        return res.status(401).json({
+            message: "Invalid email or password",
             status: "failed"
         })
     }
@@ -75,9 +75,7 @@ async function userLogoutController(req, res) {
     }
 
     res.clearCookie("token");
-    await blacklistModel.create({
-        token: token
-    })
+    await blacklistModel.updateOne({ token }, { token }, { upsert: true });
 
 
     res.status(200).json({

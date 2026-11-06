@@ -45,8 +45,15 @@ async function authSystemMiddleware(req, res, next) {
     const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-        return res.status(404).json({
+        return res.status(401).json({
             message: "Token Not found"
+        })
+    }
+
+    const isBlackListed = await blacklistModel.findOne({ token });
+    if (isBlackListed) {
+        return res.status(401).json({
+            message: "Unauthorized, Token not found(Blacklisted)"
         })
     }
 

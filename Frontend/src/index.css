@@ -1,0 +1,62 @@
+:root {
+  --bg: #09090b;
+  --sidebar: #0f0f12;
+  --surface: #16161a;
+  --surface-2: #1d1d22;
+  --border: rgba(255, 255, 255, 0.10);
+  --border-sidebar: rgba(255, 255, 255, 0.08);
+  --text: #ffffff;
+  --text-muted: #9a9aa2;
+  --text-body: #c9c9ce;
+  --accent: #ffffff;
+  --success: #3ddc97;
+  --error: #ff6b6b;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page titles use Playfair Display, everything else defaults to Outfit with letter-spacing 0 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text);
+}
+
+p,
+span,
+div,
+input,
+button,
+label {
+  letter-spacing: 0;
+}

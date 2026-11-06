@@ -1,0 +1,286 @@
+/* ==========================================================================
+   Transactions Page Styles - Refined 3-Level Surface Hierarchy
+   ========================================================================== */
+
+.transactions-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.transactions-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.transactions-title {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  line-height: 1.15;
+}
+
+.transactions-subtitle {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  color: #c9c9ce;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* ==========================================================================
+   Filter & Status Toolbar (--surface: #16161a)
+   ========================================================================== */
+
+.transactions-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 24px;
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-sizing: border-box;
+}
+
+.transactions-filter-group {
+  display: flex;
+  gap: 8px;
+}
+
+.transactions-filter-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #9a9aa2;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  cursor: pointer;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 0px !important;
+  transition: all 0.15s ease;
+}
+
+.transactions-filter-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.transactions-filter-btn.is-active {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.transactions-meta-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9a9aa2;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Table Container (--surface: #16161a)
+   ========================================================================== */
+
+.transactions-table-card {
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+}
+
+.transactions-table th {
+  padding: 16px 24px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: #9a9aa2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  user-select: none;
+}
+
+.transactions-table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #c9c9ce;
+}
+
+.transactions-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.transactions-row:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.transactions-row:last-child td {
+  border-bottom: none;
+}
+
+.cell-timestamp {
+  color: #9a9aa2;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.cell-txid {
+  color: #ffffff;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.cell-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Green ONLY for credit */
+.cell-type-badge.is-credit {
+  color: #3ddc97;
+}
+
+/* Red ONLY for debit */
+.cell-type-badge.is-debit {
+  color: #ff6b6b;
+}
+
+.cell-amount {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+.cell-amount.is-credit {
+  color: #3ddc97;
+}
+
+.cell-amount.is-debit {
+  color: #ff6b6b;
+}
+
+.cell-integrity {
+  text-align: center;
+}
+
+.integrity-pill {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #9a9aa2;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  text-transform: uppercase;
+  border-radius: 0px !important;
+}
+
+/* ==========================================================================
+   Skeleton Loading State
+   ========================================================================== */
+
+.skeleton-row td {
+  padding: 20px 24px;
+}
+
+.skeleton-bar {
+  height: 14px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.8s infinite linear;
+}
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ==========================================================================
+   Empty State Card
+   ========================================================================== */
+
+.transactions-empty-card {
+  padding: 64px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.transactions-empty-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9a9aa2;
+  margin-bottom: 16px;
+}
+
+.transactions-empty-title {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  letter-spacing: 0;
+}
+
+.transactions-empty-subtext {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  color: #c9c9ce;
+  max-width: 480px;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0;
+}

@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Transfer Page Styles - Centered Single Column Minimalist Layout
+   ========================================================================== */
+
+.transfer-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.transfer-container {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   Page Header
+   ========================================================================== */
+
+.transfer-header {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.transfer-title {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  line-height: 1.15;
+}
+
+.transfer-subtitle {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 15px;
+  color: #c9c9ce;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* ==========================================================================
+   Card Styling: --surface (#16161a), 32px padding, no nested bordered boxes
+   ========================================================================== */
+
+.transfer-card {
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 0px !important;
+  padding: 32px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ==========================================================================
+   FROM Row with 1px divider
+   ========================================================================== */
+
+.transfer-from-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.transfer-from-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transfer-from-label {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #9a9aa2;
+  text-transform: uppercase;
+}
+
+.transfer-from-id {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.transfer-from-available {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: #9a9aa2;
+  letter-spacing: 0;
+}
+
+/* ==========================================================================
+   Form Fields
+   ========================================================================== */
+
+.transfer-field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.transfer-field-label {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #9a9aa2;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.transfer-mono-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background-color: var(--surface-2, #1d1d22);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 0px !important;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.transfer-mono-input::placeholder {
+  color: rgba(255, 255, 255, 0.28);
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.transfer-mono-input:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+/* ==========================================================================
+   Amount Input (Playfair 48px, transparent, bottom-border only)
+   ========================================================================== */
+
+.transfer-amount-container {
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 4px 0 12px 0;
+  margin-bottom: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.transfer-amount-container:focus-within {
+  border-bottom-color: #ffffff;
+}
+
+.transfer-amount-prefix {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: #6b6b73;
+  margin-right: 8px;
+  user-select: none;
+}
+
+.transfer-amount-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.transfer-amount-input::placeholder {
+  color: #6b6b73;
+  font-weight: 700;
+}
+
+/* Remove default number input spinners */
+.transfer-amount-input::-webkit-outer-spin-button,
+.transfer-amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.transfer-amount-input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* ==========================================================================
+   Quick-Add Chips (+₹500, +₹1,000, +₹5,000)
+   ========================================================================== */
+
+.transfer-chips-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.transfer-chip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 0px !important;
+  transition: all 0.15s ease;
+}
+
+.transfer-chip-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ==========================================================================
+   Balance-After Single Line
+   ========================================================================== */
+
+.transfer-balance-after-line {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: #9a9aa2;
+  margin: 0 0 28px 0;
+  letter-spacing: 0;
+}
+
+.transfer-balance-after-line.is-insufficient {
+  color: #ff6b6b;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Idempotency Collapsed Line
+   ========================================================================== */
+
+.transfer-idempotency-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  color: #9a9aa2;
+  margin-top: 20px;
+  user-select: none;
+}
+
+.transfer-idempotency-mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: #c9c9ce;
+  letter-spacing: 0;
+}
+
+.transfer-idempotency-refresh-btn {
+  background: transparent;
+  border: none;
+  color: #9a9aa2;
+  cursor: pointer;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, transform 0.2s ease;
+}
+
+.transfer-idempotency-refresh-btn:hover {
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* ==========================================================================
+   Error Alert Banner
+   ========================================================================== */
+
+.transfer-error-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 107, 107, 0.08);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+  padding: 12px 16px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  border-radius: 0px !important;
+  letter-spacing: 0;
+}
+
+/* ==========================================================================
+   Step 2: Review Transfer
+   ========================================================================== */
+
+.transfer-review-title {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  letter-spacing: 0;
+}
+
+.transfer-review-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.transfer-review-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.transfer-review-row:last-child {
+  border-bottom: none;
+}
+
+.transfer-review-label {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  color: #9a9aa2;
+  letter-spacing: 0;
+}
+
+.transfer-review-value {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.transfer-review-value-mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.transfer-review-amount {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.transfer-review-actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+/* ==========================================================================
+   Step 3: Success Transfer (Centered, 56px circle with #3ddc97 check)
+   ========================================================================== */
+
+.transfer-success-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.transfer-success-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50% !important;
+  background-color: rgba(61, 220, 151, 0.10);
+  border: 1px solid rgba(61, 220, 151, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3ddc97;
+  margin-bottom: 20px;
+}
+
+.transfer-success-title {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.transfer-success-amount {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 28px 0;
+  letter-spacing: -0.02em;
+}
+
+.transfer-success-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 28px;
+}
+
+.transfer-success-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+}
+
+.transfer-success-row:last-child {
+  border-bottom: none;
+}
+
+.transfer-success-row span:first-child {
+  color: #9a9aa2;
+}
+
+.transfer-success-value-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transfer-success-ref-mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: #ffffff;
+  letter-spacing: 0;
+}
+
+.transfer-success-copy-btn {
+  background: transparent;
+  border: none;
+  color: #9a9aa2;
+  cursor: pointer;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.transfer-success-copy-btn:hover {
+  color: #ffffff;
+}
+
+.transfer-success-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .transfer-card {
+    padding: 24px 20px;
+  }
+
+  .transfer-review-actions,
+  .transfer-success-actions {
+    grid-template-columns: 1fr;
+  }
+}

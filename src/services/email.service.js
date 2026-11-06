@@ -246,4 +246,4 @@ async function sendTransactionFailureEmail(userEmail, name, amount, toAccount) {
   await sendEmail(userEmail, subject, text, html);
 }
 
-module.exports = { sendRegistrationEmail, sendTransactionEmail, sendRegistrationEmail };
+module.exports = { sendRegistrationEmail, sendTransactionEmail, sendTransactionFailureEmail };  
