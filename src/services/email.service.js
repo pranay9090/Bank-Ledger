@@ -40,7 +40,7 @@ const sendEmail = async (to, subject, text, html) => {
 
 async function sendRegistrationEmail(userEmail, name) {
   const firstName = (name || '').trim();
-  const loginUrl = process.env.FRONTEND_URL || 'http://localhost:8000';
+  const loginUrl = process.env.FRONTEND_URL;
 
   const subject = 'Welcome to Bank Ledger';
   const text = `Dear ${firstName},\n\nYour Bank Ledger account has been created successfully. You can now sign in to view your account and transactions.\n\nFor your security, Bank Ledger will never ask for your password, PIN or OTP by email or phone.\n\nBank Ledger`;

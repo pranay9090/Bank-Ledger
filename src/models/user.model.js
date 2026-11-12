@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, "Email is required to create the account"],
-        unique: [true, "Email already exists"],
+        unique: true,
         trim: true,
         lowercase: true,
         match: [/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, "Please enter a valid email"]
@@ -32,14 +32,13 @@ const userSchema = new mongoose.Schema({
 
 
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if (!this.isModified("password")) {
         return;
     }
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash;
-    return next;
-})
+});
 
 userSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password)

@@ -1,0 +1,88 @@
+/* ==========================================================================
+   Overview Stat Cards Component
+   ========================================================================== */
+
+.overview-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .overview-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .overview-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.overview-stat-card {
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.overview-stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.overview-stat-label {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  color: #9a9aa2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.overview-stat-value {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.overview-stat-value.is-count {
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.overview-stat-value.is-credit {
+  color: #3ddc97;
+}
+
+.overview-stat-value.is-debit {
+  color: #ff6b6b;
+}
+
+.overview-stats-loading {
+  background-color: var(--surface, #16161a);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  padding: 24px;
+  color: #9a9aa2;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+

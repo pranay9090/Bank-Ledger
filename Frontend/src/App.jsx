@@ -7,6 +7,7 @@ import Register from './pages/Register.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Transfer from './pages/Transfer.jsx';
 import Transactions from './pages/Transactions.jsx';
+import Analytics from './pages/Analytics.jsx';
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -63,6 +64,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/transfer" element={<Transfer />} />
         <Route path="/transactions" element={<Transactions />} />
+        <Route path="/analytics" element={<Analytics />} />
       </Route>
 
       {/* Fallback Catch-all */}

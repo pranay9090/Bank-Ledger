@@ -12,6 +12,8 @@ import {
 import { useAuth } from '../context/useAuth';
 import accountService from '../services/accountService';
 import transactionService from '../services/transactionService';
+import analyticsService from '../services/analyticsService';
+import OverviewStatCards from '../components/analytics/OverviewStatCards';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -21,6 +23,8 @@ function Dashboard() {
   const [copied, setCopied] = useState(false);
   const [recentEntries, setRecentEntries] = useState([]);
   const [loadingEntries, setLoadingEntries] = useState(true);
+  const [overviewStats, setOverviewStats] = useState(null);
+  const [loadingOverview, setLoadingOverview] = useState(true);
 
   // Load user's account details and aggregated balance
   useEffect(() => {
@@ -58,6 +62,27 @@ function Dashboard() {
       })
       .finally(() => {
         if (isMounted) setLoadingEntries(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Load analytics overview stats
+  useEffect(() => {
+    let isMounted = true;
+    analyticsService
+      .getOverview()
+      .then((data) => {
+        if (isMounted) {
+          setOverviewStats(data);
+        }
+      })
+      .catch(() => {
+        // Fallback gracefully
+      })
+      .finally(() => {
+        if (isMounted) setLoadingOverview(false);
       });
     return () => {
       isMounted = false;
@@ -189,7 +214,10 @@ function Dashboard() {
         </Link>
       </div>
 
-      {/* 5. RECENT ACTIVITY: listing the last 5 ledger entries */}
+      {/* 5. OVERVIEW STAT CARDS */}
+      <OverviewStatCards data={overviewStats} loading={loadingOverview} />
+
+      {/* 6. RECENT ACTIVITY: listing the last 5 ledger entries */}
       <div className="dashboard-activity-card">
         <div className="dashboard-activity-header">
           <h2 className="dashboard-activity-title">Recent activity</h2>

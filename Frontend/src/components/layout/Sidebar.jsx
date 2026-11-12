@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   ArrowLeftRight,
   ReceiptText,
+  BarChart3,
   LogOut,
   ShieldCheck,
   X,
@@ -36,6 +37,11 @@ function Sidebar({ isOpen, onClose }) {
       to: '/transactions',
       label: 'Ledger History',
       icon: ReceiptText,
+    },
+    {
+      to: '/analytics',
+      label: 'Analytics',
+      icon: BarChart3,
     },
   ];
 
