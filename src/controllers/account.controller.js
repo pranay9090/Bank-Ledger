@@ -35,6 +35,9 @@ async function getAccountController(req, res) {
         const user = req.user;
 
         const account = await accountModel.findOne({ user: user._id });
+        if (account && (typeof account.currentBalance !== 'number' || account.currentBalance === 0)) {
+            await account.syncBalance();
+        }
 
         return res.status(200).json({
             message: "Your account is fetched!!",

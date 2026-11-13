@@ -5,7 +5,9 @@ import {
   AlertCircle,
   FileSpreadsheet,
   TrendingUp,
+  Download,
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 import {
   ResponsiveContainer,
   PieChart,
@@ -23,6 +25,7 @@ import {
 } from 'recharts';
 import analyticsService from '../services/analyticsService';
 import accountService from '../services/accountService';
+import { useAuth } from '../context/useAuth';
 import OverviewStatCards from '../components/analytics/OverviewStatCards';
 import './Analytics.css';
 
@@ -93,6 +96,7 @@ function DarkTooltip({ active, payload, label, isCurrency = true }) {
 }
 
 function Analytics() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
 
   // Tab 1: Overview State
@@ -232,6 +236,240 @@ function Analytics() {
     { name: 'Debit Transactions', value: overviewData?.debitCount || 0, color: '#ff6b6b' },
   ];
   const totalVolumeCount = (overviewData?.creditCount || 0) + (overviewData?.debitCount || 0);
+
+  const handleDownloadPDF = () => {
+    if (!statementData || statementData.length === 0) return;
+
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth(); // 210mm
+    const pageHeight = doc.internal.pageSize.getHeight(); // 297mm
+    const margin = 14;
+    const contentWidth = pageWidth - margin * 2; // 182mm
+
+    // Avoids Unicode '₹' corruption in standard jsPDF fonts
+    const formatPDFCurrency = (val) => {
+      const num = Number(val || 0);
+      return `INR ${num.toLocaleString('en-IN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    };
+
+    // Calculate Statement Totals
+    let totalCredits = 0;
+    let totalDebits = 0;
+    statementData.forEach((row) => {
+      const amt = Number(row.amount || 0);
+      if (row.type === 'CREDIT') totalCredits += amt;
+      else if (row.type === 'DEBIT') totalDebits += amt;
+    });
+
+    const closingBalance = statementData[statementData.length - 1]?.balanceAfter || 0;
+    const generatedDate = new Date().toLocaleString('en-IN', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+
+    // 1. Sleek Top Accent Bar
+    doc.setFillColor(9, 9, 11);
+    doc.rect(0, 0, pageWidth, 4, 'F');
+
+    // 2. Executive Header (Bank Ledger Letterhead)
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(17, 24, 39); // #111827
+    doc.text('BANK LEDGER', margin, 18);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(107, 114, 128); // #6b7280
+    doc.text('INSTITUTIONAL DOUBLE-ENTRY AUDIT RECORD // ACID SECURED', margin, 24);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(17, 24, 39);
+    doc.text('OFFICIAL ACCOUNT STATEMENT', pageWidth - margin, 18, { align: 'right' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(107, 114, 128);
+    doc.text(`Generated: ${generatedDate}`, pageWidth - margin, 24, { align: 'right' });
+
+    // Subtle header divider
+    doc.setDrawColor(229, 231, 235);
+    doc.setLineWidth(0.5);
+    doc.line(margin, 28, pageWidth - margin, 28);
+
+    // 3. Client & Statement Summary Cards (Side by side)
+    const boxY = 33;
+    const boxHeight = 35;
+    const halfWidth = (contentWidth - 6) / 2;
+
+    // Left Card: Account Metadata
+    doc.setFillColor(249, 250, 251);
+    doc.setDrawColor(229, 231, 235);
+    doc.roundedRect(margin, boxY, halfWidth, boxHeight, 2, 2, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(107, 114, 128);
+    doc.text('ACCOUNT HOLDER', margin + 6, boxY + 7);
+    doc.text('ACCOUNT IDENTIFIER', margin + 6, boxY + 18);
+    doc.text('LEDGER PROTOCOL', margin + 6, boxY + 28);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(17, 24, 39);
+    doc.text(String(user?.name || 'Verified Client'), margin + 6, boxY + 12);
+
+    doc.setFont('courier', 'bold');
+    doc.setFontSize(8.5);
+    doc.text(String(accountId || 'primary_account'), margin + 6, boxY + 23);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(55, 65, 81);
+    doc.text('Double-Entry Real-Time Reconciled (INR)', margin + 6, boxY + 32);
+
+    // Right Card: Financial Closing Totals
+    const rightX = margin + halfWidth + 6;
+    doc.setFillColor(249, 250, 251);
+    doc.roundedRect(rightX, boxY, halfWidth, boxHeight, 2, 2, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(107, 114, 128);
+    doc.text('TOTAL CREDITS', rightX + 6, boxY + 7);
+    doc.text('TOTAL DEBITS', rightX + 6, boxY + 16);
+    doc.text('NET CLOSING BALANCE', rightX + 6, boxY + 25);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8.5);
+    doc.setTextColor(21, 128, 61); // #15803d
+    doc.text(`+ ${formatPDFCurrency(totalCredits)}`, rightX + halfWidth - 6, boxY + 7, { align: 'right' });
+
+    doc.setTextColor(185, 28, 28); // #b91c1c
+    doc.text(`- ${formatPDFCurrency(totalDebits)}`, rightX + halfWidth - 6, boxY + 16, { align: 'right' });
+
+    doc.setFontSize(10.5);
+    doc.setTextColor(17, 24, 39);
+    doc.text(formatPDFCurrency(closingBalance), rightX + halfWidth - 6, boxY + 26, { align: 'right' });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(107, 114, 128);
+    doc.text(`Total Records: ${statementData.length} entries`, rightX + 6, boxY + 32);
+
+    // 4. Statement Table
+    let tableY = 74;
+
+    const drawTableHeader = (y) => {
+      doc.setFillColor(243, 244, 246);
+      doc.rect(margin, y, contentWidth, 8, 'F');
+      doc.setDrawColor(229, 231, 235);
+      doc.line(margin, y + 8, margin + contentWidth, y + 8);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      doc.setTextColor(75, 85, 99);
+      doc.text('DATE', margin + 4, y + 5.5);
+      doc.text('TYPE', margin + 35, y + 5.5);
+      doc.text('AMOUNT', margin + 110, y + 5.5, { align: 'right' });
+      doc.text('RUNNING BALANCE', margin + contentWidth - 4, y + 5.5, { align: 'right' });
+    };
+
+    drawTableHeader(tableY);
+    tableY += 8;
+
+    statementData.forEach((row, i) => {
+      // Page break calculation
+      if (tableY > pageHeight - 22) {
+        doc.addPage();
+
+        doc.setFillColor(9, 9, 11);
+        doc.rect(0, 0, pageWidth, 4, 'F');
+
+        tableY = 16;
+        drawTableHeader(tableY);
+        tableY += 8;
+      }
+
+      // Alternating row zebra striping
+      if (i % 2 === 1) {
+        doc.setFillColor(250, 250, 252);
+        doc.rect(margin, tableY, contentWidth, 7.5, 'F');
+      }
+
+      const isCredit = row.type === 'CREDIT';
+
+      // Date
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(55, 65, 81);
+      doc.text(formatDateLabel(row.date), margin + 4, tableY + 5);
+
+      // Type Badge
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      if (isCredit) {
+        doc.setTextColor(21, 128, 61);
+        doc.text('CREDIT', margin + 35, tableY + 5);
+      } else {
+        doc.setTextColor(185, 28, 28);
+        doc.text('DEBIT', margin + 35, tableY + 5);
+      }
+
+      // Amount (right aligned with plenty of space)
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      if (isCredit) {
+        doc.setTextColor(21, 128, 61);
+        doc.text(`+ ${formatPDFCurrency(row.amount)}`, margin + 110, tableY + 5, { align: 'right' });
+      } else {
+        doc.setTextColor(185, 28, 28);
+        doc.text(`- ${formatPDFCurrency(row.amount)}`, margin + 110, tableY + 5, { align: 'right' });
+      }
+
+      // Running Balance (right aligned safely within table bounds)
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(17, 24, 39);
+      doc.text(formatPDFCurrency(row.balanceAfter), margin + contentWidth - 4, tableY + 5, { align: 'right' });
+
+      // Subtle row border line
+      doc.setDrawColor(243, 244, 246);
+      doc.line(margin, tableY + 7.5, margin + contentWidth, tableY + 7.5);
+
+      tableY += 7.5;
+    });
+
+    // 5. Official Cryptographic Footers across all pages
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let p = 1; p <= totalPages; p++) {
+      doc.setPage(p);
+
+      doc.setDrawColor(229, 231, 235);
+      doc.setLineWidth(0.5);
+      doc.line(margin, pageHeight - 12, margin + contentWidth, pageHeight - 12);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7);
+      doc.setTextColor(156, 163, 175);
+      doc.text(
+        'CONFIDENTIAL // BANK LEDGER CRYPTOGRAPHIC DOUBLE-ENTRY AUDIT STATEMENT',
+        margin,
+        pageHeight - 7.5
+      );
+      doc.text(`Page ${p} of ${totalPages}`, margin + contentWidth, pageHeight - 7.5, { align: 'right' });
+    }
+
+    doc.save(`Bank_Ledger_Statement_${accountId || 'account'}_${new Date().toISOString().split('T')[0]}.pdf`);
+  };
 
   return (
     <div className="analytics-page">
@@ -510,11 +748,24 @@ function Analytics() {
       {activeTab === 'statement' && (
         <div className="analytics-tab-content">
           <div className="analytics-card" style={{ padding: 0 }}>
-            <div style={{ padding: '24px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-              <h2 className="analytics-card-title">Chronological Account Statement</h2>
-              <p className="analytics-card-desc">
-                Running ledger statement showing debit, credit, and post-transaction balance.
-              </p>
+            <div style={{ padding: '24px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+              <div>
+                <h2 className="analytics-card-title">Chronological Account Statement</h2>
+                <p className="analytics-card-desc">
+                  Running ledger statement showing debit, credit, and post-transaction balance.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                className="analytics-export-pdf-btn"
+                onClick={handleDownloadPDF}
+                disabled={statementLoading || !statementData || statementData.length === 0}
+                title="Download printable executive statement"
+              >
+                <Download size={14} />
+                <span>DOWNLOAD PDF</span>
+              </button>
             </div>
 
             {statementLoading ? (

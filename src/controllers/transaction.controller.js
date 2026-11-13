@@ -93,7 +93,7 @@ async function createTransaction(req, res) {
         const lockedFromAccount = await accountModel.findOneAndUpdate(
             { _id: fromAccount, status: "ACTIVE" },
             { $inc: { version: 1 } },
-            { session, new: true }
+            { session, returnDocument: 'after' }
         );
 
         if (!lockedFromAccount) {
@@ -134,10 +134,23 @@ async function createTransaction(req, res) {
             transaction: transaction._id
         }], { session });
 
+        // Atomically update materialized currentBalance on both accounts inside session
+        await accountModel.updateOne(
+            { _id: fromAccount },
+            { $inc: { currentBalance: -numericAmount } },
+            { session }
+        );
+
+        await accountModel.updateOne(
+            { _id: toAccount },
+            { $inc: { currentBalance: numericAmount } },
+            { session }
+        );
+
         const completedTransaction = await transactionModel.findOneAndUpdate(
             { _id: transaction._id },
             { status: "COMPLETED" },
-            { session, new: true }
+            { session, returnDocument: 'after' }
         );
 
         await session.commitTransaction();
@@ -253,10 +266,23 @@ async function createInitialTransactionFunds(req, res) {
             transaction: transaction._id
         }], { session });
 
+        // Initial funds: Atomically update materialized currentBalance on both accounts inside session
+        await accountModel.updateOne(
+            { _id: fromUserAccount._id },
+            { $inc: { currentBalance: -numericAmount } },
+            { session }
+        );
+
+        await accountModel.updateOne(
+            { _id: toAccount },
+            { $inc: { currentBalance: numericAmount } },
+            { session }
+        );
+
         const completedTransaction = await transactionModel.findOneAndUpdate(
             { _id: transaction._id },
             { status: "COMPLETED" },
-            { session, new: true }
+            { session, returnDocument: 'after' }
         );
 
         await session.commitTransaction();

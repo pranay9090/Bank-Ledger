@@ -287,4 +287,197 @@ async function getStatement(req, res) {
     }
 }
 
-module.exports = { getOverview, getMonthly, getDaily, getStatement }
+
+
+async function getBalance(req, res) {
+    try {
+
+        const userAccount = await accountModel.find({
+            user: req.user._id
+        })
+        const accountId = userAccount.map(acc => acc._id);
+
+        if (accountId.length === 0) {
+            return res.status(200).json({
+                data: []
+            })
+        }
+
+        const Balance = await ledgerModel.aggregate([
+            {
+                $match: {
+                    account: { $in: accountId }
+                }
+            },
+            {
+                $group: {
+                    _id: "$account",
+                    totalCredits: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "CREDIT"] }, "$amount", 0]
+                        }
+                    },
+                    totalDebits: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "DEBIT"] }, "$amount", 0]
+                        }
+                    },
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    account: "$_id",
+                    totalCredits: 1,
+                    totalDebits: 1,
+                    balance: {
+                        $subtract: [
+                            { "$ifNull": ["$totalCredits", 0] },
+                            { "$ifNull": ["$totalDebits", 0] }
+                        ]
+                    }
+                }
+            }
+        ])
+
+        const data = Balance[0] || {
+            totalCredits: 0,
+            totalDebits: 0,
+            balance: 0
+        }
+
+        return res.status(200).json({
+            status: true,
+            data
+        })
+    } catch (error) {
+        console.error("Error in getBalance analytics:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
+
+async function topDebit(req, res) {
+    try {
+        // const allAccounts = await ledgerModel.find({});
+        const userAccount = await accountModel.find({
+            user: req.user._id
+        })
+        const accountId = userAccount.map(acc => acc._id);
+
+        if (accountId.length === 0) {
+            return res.status(200).json({
+                data: []
+            })
+        }
+
+        const topDebits = await ledgerModel.aggregate([
+            {
+                $match: {
+                    account: { $in: accountId }
+                }
+            },
+            {
+                $group: {
+                    _id: "$account",
+                    totalDebits: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "DEBIT"] }, "$amount", 0]
+                        }
+                    },
+                },
+
+            },
+            {
+                $sort: { "totalDebits": -1 }
+            },
+            {
+                $limit: 2
+
+            },
+            {
+                $project: {
+                    _id: 0,
+                    account: "$_id",
+                    totalDebits: 1
+                }
+            }
+        ])
+
+        // const data = topDebits[0] || {
+        //     account: 0,
+        //     totalDebits: 0,
+
+        // }
+        return res.status(200).json({
+            status: true,
+            // data
+            topDebits
+        })
+
+    } catch (error) {
+        console.error("Error in topDebit analytics:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
+
+async function getStatistics(req, res) {
+    try {
+        const userAccount = await accountModel.find({ user: req.user._id });
+        const accountId = userAccount.map(acc => acc._id);
+
+        if (accountId.length === 0) {
+            return res.status(200).json({
+                status: true,
+                stats: []
+            });
+        }
+
+        const stats = await ledgerModel.aggregate([
+            {
+                $match: {
+                    account: { $in: accountId }
+                }
+            },
+            {
+                $group: {
+                    _id: "$account",
+                    transactionCount: { $sum: 1 },
+                    highestTransaction: { $max: "$amount" },
+                    averageAmount: { $avg: "$amount" }
+
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    account: "$_id",
+                    transactionCount: 1,
+                    highestTransaction: 1,
+                    averageAmount: 1
+
+                }
+            }
+        ])
+
+        return res.status(200).json({
+            status: true,
+            stats
+        })
+
+    } catch (error) {
+        console.error("Error in getStatistics analytics:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+
+}
+
+module.exports = { getOverview, getMonthly, getDaily, getStatement, getBalance, topDebit, getStatistics }

@@ -23,12 +23,22 @@ const accountSchema = new mongoose.Schema({
     version: {
         type: Number,
         default: 0
+    },
+    // Materialized running balance field for O(1) balance lookups
+    currentBalance: {
+        type: Number,
+        default: 0,
+        index: true
     }
 }, { timestamps: true });
 
 accountSchema.index({ user: 1, status: 1 });
 
-accountSchema.methods.getBalance = async function (session) {
+/**
+ * Reconciles and synchronizes the materialized currentBalance field against the immutable ledger
+ * @param {import('mongoose').ClientSession} [session]
+ */
+accountSchema.methods.syncBalance = async function (session) {
     const aggregate = ledgerModel.aggregate([
         { $match: { account: this._id } },
         {
@@ -67,11 +77,24 @@ accountSchema.methods.getBalance = async function (session) {
     }
 
     const balanceData = await aggregate;
-    if (balanceData.length === 0) {
-        return 0;
-    }
+    const derivedBalance = balanceData.length === 0 ? 0 : balanceData[0].balance;
 
-    return balanceData[0].balance;
+    this.currentBalance = derivedBalance;
+    await this.save(session ? { session } : {});
+    return derivedBalance;
+};
+
+/**
+ * Returns current balance in O(1) time complexity using the materialized field
+ * Falls back to full ledger aggregation if forceSync is explicitly requested
+ * @param {import('mongoose').ClientSession} [session]
+ * @param {boolean} [forceSync]
+ */
+accountSchema.methods.getBalance = async function (session, forceSync = false) {
+    if (!forceSync && typeof this.currentBalance === 'number') {
+        return this.currentBalance;
+    }
+    return await this.syncBalance(session);
 };
 
 const accountModel = mongoose.model("account", accountSchema);

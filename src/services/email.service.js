@@ -32,7 +32,10 @@ const sendEmail = async (to, subject, text, html) => {
     });
 
     console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    const previewUrl = nodemailer.getTestMessageUrl(info);
+    if (previewUrl) {
+      console.log('Preview URL: %s', previewUrl);
+    }
   } catch (error) {
     console.error('Error sending email:', error);
   }

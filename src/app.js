@@ -6,8 +6,21 @@ const accountRouter = require("./routes/account.routes.js");
 const transactionRouter = require("./routes/transaction.routes.js");
 const analyticRoutes = require('./routes/analytics.routes.js')
 const cookie_parser = require("cookie-parser");
+const { rateLimit } = require("express-rate-limit");
 
 const app = express();
+
+// Rate limiter for authentication routes (protection against credential stuffing / brute-force)
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 50, // max 50 requests per 15 minutes per IP
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: {
+        status: "failed",
+        message: "Too many authentication attempts from this IP, please try again after 15 minutes."
+    }
+});
 
 const allowedOrigins = [
     'http://localhost:5173',
@@ -31,7 +44,7 @@ app.use(express.json());
 app.use(cookie_parser());
 
 // routes
-app.use("/api/auth", authRouter);
+app.use("/api/auth", authLimiter, authRouter);
 app.use("/api/account", accountRouter);
 app.use("/api/transactions", transactionRouter);
 app.use("/api/analytics", analyticRoutes);

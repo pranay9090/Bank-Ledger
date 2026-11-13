@@ -287,6 +287,33 @@
   background-color: rgba(255, 255, 255, 0.02);
 }
 
+.analytics-export-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #09090b;
+  border: none;
+  font-family: var(--font-body, 'Outfit', sans-serif);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 18px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.analytics-export-pdf-btn:hover:not(:disabled) {
+  background-color: #e4e4e7;
+  transform: translateY(-1px);
+}
+
+.analytics-export-pdf-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .analytics-badge-credit {
   display: inline-block;
   font-family: var(--font-body, 'Outfit', sans-serif);
